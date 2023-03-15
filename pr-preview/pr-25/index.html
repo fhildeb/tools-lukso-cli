@@ -285,15 +285,13 @@ check_bin_dir() {
 print_install() {
   # if the shell does not fit the default case change the config file
   # and or the config cmd variable
-  printf "# starts your currently installed default clients and connects to LUKSO mainnet\n\n" \
-    "${BOLD}\$${NO_COLOR} lukso start\n\n" \
-    "# starts your nodes connecting to the testnet\n" \
-    "${BOLD}\$${NO_COLOR} lukso start --testnet\n\n" \
-    "# starts your nodes connecting to the mainet as a validator\n" \
-    "# use default keystore folder (/mainnet-keystore)\n" \
-    "${BOLD}\$${NO_COLOR} lukso start --validator"
-
-  printf "\n"
+  echo "> starts your currently installed default clients and connects to LUKSO mainnet"
+  echo "${BOLD}\$${NO_COLOR} lukso start\n"
+  echo "> starts your nodes connecting to the testnet"
+  echo "${BOLD}\$${NO_COLOR} lukso start --testnet\n"
+  echo "> starts your nodes connecting to the mainet as a validator"
+  echo "> use default keystore folder (/mainnet-keystore)"
+  echo "${BOLD}\$${NO_COLOR} lukso start --validator\n"
 }
 
 is_build_available() {
