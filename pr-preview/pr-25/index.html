@@ -61,7 +61,7 @@ get_tmpfile() {
     printf "%s.%s" "$(mktemp)" "${suffix}"
   else
     # No really good options here--let's pick a default + hope
-    printf "/tmp/lukso-cli.%s" "${suffix}"
+    printf "/tmp/lukso.%s" "${suffix}"
   fi
 }
 
@@ -96,10 +96,10 @@ download() {
 
   error "Command failed (exit code $rc): ${BLUE}${cmd}${NO_COLOR}"
   printf "\n" >&2
-  info "This is likely due to lukso-cli not yet supporting your configuration."
+  info "This is likely due to lukso not yet supporting your configuration."
   info "If you would like to see a build for your configuration,"
   info "please create an issue requesting a build for ${MAGENTA}${TARGET}${NO_COLOR}:"
-  info "${BOLD}${UNDERLINE}https://github.com/lukso-cli/lukso-cli/issues/new/${NO_COLOR}"
+  info "${BOLD}${UNDERLINE}https://github.com/lukso-network/tools-lukso-cli/issues/new/${NO_COLOR}"
   return $rc
 }
 
@@ -124,7 +124,7 @@ unpack() {
   error "Unknown package extension."
   printf "\n"
   info "This almost certainly results from a bug in this script--please file a"
-  info "bug report at https://github.com/lukso-cli/lukso-cli/issues"
+  info "bug report at https://github.com/lukso-network/tools-lukso-cli/issues"
   return 1
 }
 
@@ -132,7 +132,7 @@ usage() {
   printf "%s\n" \
     "install.sh [option]" \
     "" \
-    "Fetch and install the latest version of lukso-cli, if lukso-cli is already" \
+    "Fetch and install the latest version of lukso, if lukso is already" \
     "installed it will be updated to the latest version."
 
   printf "\n%s\n" "Options"
@@ -164,12 +164,12 @@ install() {
 
   if test_writeable "${BIN_DIR}"; then
     sudo=""
-    msg="Installing lukso-cli, please wait…"
+    msg="Installing lukso, please wait…"
   else
     warn "Escalated permissions are required to install to ${BIN_DIR}"
     elevate_priv
     sudo="sudo"
-    msg="Installing lukso-cli as root, please wait…"
+    msg="Installing lukso as root, please wait…"
   fi
   info "$msg"
 
@@ -285,78 +285,13 @@ check_bin_dir() {
 print_install() {
   # if the shell does not fit the default case change the config file
   # and or the config cmd variable
-  for s in "bash" "zsh" "ion" "tcsh" "xonsh" "fish"
-  do
-    # shellcheck disable=SC2088
-    # we don't want these '~' expanding
-    config_file="~/.${s}rc"
-    config_cmd="eval \"\$(lukso-cli init ${s})\""
-
-    case ${s} in
-      ion )
-        # shellcheck disable=SC2088
-        config_file="~/.config/ion/initrc"
-        config_cmd="eval \$(lukso-cli init ${s})"
-        ;;
-      fish )
-        # shellcheck disable=SC2088
-        config_file="~/.config/fish/config.fish"
-        config_cmd="lukso-cli init fish | source"
-        ;;
-      tcsh )
-        config_cmd="eval \`lukso-cli init ${s}\`"
-        ;;
-      xonsh )
-        config_cmd="execx(\$(lukso-cli init xonsh))"
-        ;;
-    esac
-
-    printf "  %s\n  Add the following to the end of %s:\n\n\t%s\n\n" \
-      "${BOLD}${UNDERLINE}${s}${NO_COLOR}" \
-      "${BOLD}${config_file}${NO_COLOR}" \
-      "${config_cmd}"
-  done
-
-  for s in "elvish" "nushell"
-  do
-
-    warning="${BOLD}Warning${NO_COLOR}"
-    case ${s} in
-      elvish )
-        # shellcheck disable=SC2088
-        config_file="~/.elvish/rc.elv"
-        config_cmd="eval (lukso-cli init elvish)"
-        warning="${warning} Only elvish v0.17 or higher is supported."
-        ;;
-      nushell )
-        # shellcheck disable=SC2088
-        config_file="${BOLD}your nu config file${NO_COLOR} (find it by running ${BOLD}\$nu.config-path${NO_COLOR} in Nushell)"
-        config_cmd="mkdir ~/.cache/lukso-cli
-        lukso-cli init nu | save -f ~/.cache/lukso-cli/init.nu
-        source ~/.cache/lukso-cli/init.nu"
-        warning="${warning} This will change in the future.
-  Only Nushell v0.73 or higher is supported.
-  Add the following to the end of ${BOLD}your Nushell env file${NO_COLOR} (find it by running ${BOLD}\$nu.env-path${NO_COLOR} in Nushell): \"mkdir ~/.cache/lukso-cli; lukso-cli init nu | save -f ~/.cache/lukso-cli/init.nu\""
-        ;;
-    esac
-    printf "  %s\n  %s\n  And add the following to the end of %s:\n\n\t%s\n\n" \
-      "${BOLD}${UNDERLINE}${s}${NO_COLOR}" \
-      "${warning}" \
-      "${config_file}" \
-      "${config_cmd}"
-  done
-
-  printf "  %s\n  Add the following to the end of %s:\n  %s\n\n\t%s\n\n" \
-    "${BOLD}${UNDERLINE}PowerShell${NO_COLOR}" \
-    "${BOLD}Microsoft.PowerShell_profile.ps1${NO_COLOR}" \
-    "You can check the location of this file by querying the \$PROFILE variable in PowerShell.
-  Typically the path is ~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1 or ~/.config/powershell/Microsoft.PowerShell_profile.ps1 on -Nix." \
-    "Invoke-Expression (&lukso-cli init powershell)"
-
-  printf "  %s\n  You need to use Clink (v1.2.30+) with Cmd. Add the following to a file %s and place this file in Clink scripts directory:\n\n\t%s\n\n" \
-    "${BOLD}${UNDERLINE}Cmd${NO_COLOR}" \
-    "${BOLD}lukso-cli.lua${NO_COLOR}" \
-    "load(io.popen('lukso-cli init cmd'):read(\"*a\"))()"
+  printf "# starts your currently installed default clients and connects to LUKSO mainnet\n\n" \
+    "${BOLD}\$${NO_COLOR} lukso start\n\n" \
+    "# starts your nodes connecting to the testnet\n" \
+    "${BOLD}\$${NO_COLOR} lukso start --testnet\n\n" \
+    "# starts your nodes connecting to the mainet as a validator\n" \
+    "# use default keystore folder (/mainnet-keystore)\n" \
+    "${BOLD}\$${NO_COLOR} lukso start --validator"
 
   printf "\n"
 }
@@ -377,11 +312,11 @@ is_build_available() {
   )
 
   if [ "${good}" != "1" ]; then
-    error "${arch} builds for ${platform} are not yet available for lukso-cli"
+    error "${arch} builds for ${platform} are not yet available for lukso"
     printf "\n" >&2
     info "If you would like to see a build for your configuration,"
     info "please create an issue requesting a build for ${MAGENTA}${target}${NO_COLOR}:"
-    info "${BOLD}${UNDERLINE}https://github.com/lukso-cli/lukso-cli/issues/new/${NO_COLOR}"
+    info "${BOLD}${UNDERLINE}https://github.com/lukso-network/tools-lukso-cli/issues/new/${NO_COLOR}"
     printf "\n"
     exit 1
   fi
@@ -494,13 +429,13 @@ printf '\n'
 
 EXT=tar.gz
 
-URL="${BASE_URL}/artifacts/lukso-cli-${TARGET}.${EXT}"
+URL="${BASE_URL}/artifacts/lukso-${TARGET}.${EXT}"
 info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
-confirm "Install lukso-cli ${GREEN}latest${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}${NO_COLOR}?"
+confirm "Install lukso ${GREEN}latest${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}${NO_COLOR}?"
 check_bin_dir "${BIN_DIR}"
 
 install "${EXT}"
-completed "lukso-cli installed"
+completed "lukso installed"
 
 printf '\n'
 info "Please follow the steps for your shell to complete the installation:"
