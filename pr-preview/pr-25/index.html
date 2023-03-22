@@ -432,7 +432,7 @@ then
       info "${RED}make sure your ${GREEN}\$PATH${RED} includes the new one first${NO_COLOR}"
     fi
     echo ""
-    info "${RED}Press Ctrl-C or reply ${BOLD}N${NO_COLOR}${RED} if you don't want to upgrade to version v0.5.0+a2e1655+pr-25${NO_COLOR}"
+    info "${RED}Press Ctrl-C or reply ${BOLD}N${NO_COLOR}${RED} if you don't want to upgrade to version v0.5.0+3f1d34a+pr-25${NO_COLOR}"
     echo ""
   fi
 fi
@@ -441,7 +441,7 @@ info "${BOLD}Repository${NO_COLOR}:       ${GREEN}https://github.com/lukso-netwo
 info "${BOLD}Bin directory${NO_COLOR}:    ${GREEN}${BIN_DIR}${NO_COLOR}"
 info "${BOLD}Platform${NO_COLOR}:         ${GREEN}${PLATFORM}${NO_COLOR}"
 info "${BOLD}Arch${NO_COLOR}:             ${GREEN}${ARCH}${NO_COLOR}"
-info "${BOLD}Version${NO_COLOR}:          ${GREEN}v0.5.0+a2e1655+pr-25${NO_COLOR}"
+info "${BOLD}Version${NO_COLOR}:          ${GREEN}v0.5.0+3f1d34a+pr-25${NO_COLOR}"
 
 # non-empty VERBOSE enables verbose untarring
 if [ -n "${VERBOSE-}" ]; then
@@ -460,7 +460,7 @@ info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
 info ""
 info "You need to agree to the LUKSO CLI terms before continuing:"
 info "${BOLD}https://github.com/lukso-network/tools-lukso-cli/blob/main/LICENSE.md${NO_COLOR}"
-confirm "Agree and install lukso ${GREEN}v0.5.0+a2e1655+pr-25${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}${NO_COLOR}?"
+confirm "Agree and install lukso ${GREEN}v0.5.0+3f1d34a+pr-25${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}${NO_COLOR}?"
 check_bin_dir "${BIN_DIR}"
 
 # if the shell does not fit the default case change the config file
